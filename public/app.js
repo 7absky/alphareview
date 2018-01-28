@@ -39,39 +39,37 @@ Whiteboard.prototype.addListeners = function() {
 }
 
 Whiteboard.prototype.onDrawingEvent = function(data) {
-    this.drawLine(data.x0, data.y0, data.x1, data.y1);
+    var w = this.element.width;
+    var h = this.element.height;
+    this.drawLine(data.x0 * w, data.y0 * h, data.x1 * w, data.y1 * h);
 }
 
 Whiteboard.prototype.startDrawing = function(e) {
     this.currentState.isDrawing = true;
-    this.currentState.posX = e.pageX - this.element.offsetLeft;
-    this.currentState.posY = e.pageY - this.element.offsetTop;
+    // coordinates on canvas element
+    this.currentState.posX = e.pageX;
+    this.currentState.posY = e.pageY;
 }
 
 Whiteboard.prototype.draw = function(e) {
     if(this.currentState.isDrawing) {
         var x0 = this.currentState.posX;
         var y0 = this.currentState.posY;
-        var x1 = e.pageX - this.element.offsetLeft;
-        var y1 = e.pageY - this.element.offsetTop;
+        var x1 = e.pageX;
+        var y1 = e.pageY;
         this.drawLine(x0, y0, x1, y1, true);
-        // this.context.lineTo(e.pageX - this.element.offsetLeft, e.pageY - this.element.offsetTop);
-        // this.context.stroke();
-        this.currentState.posX = e.pageX - this.element.offsetLeft;
-        this.currentState.posY = e.pageY - this.element.offsetTop;
+
+        this.currentState.posX = e.pageX;
+        this.currentState.posY = e.pageY;
     }
 }
 
 Whiteboard.prototype.drawLine = function(x0, y0, x1, y1, emit) {
-    // var x0 = state.posX;
-    // var y0 = state.posY;
-    // var x1 = event.pageX - this.element.offsetLeft;
-    // var y1 = event.pageY - this.element.offsetTop;
     var ctx = this.context;
 
     ctx.beginPath();
-    ctx.moveTo(x0, y0);
-    ctx.lineTo(x1,y1);
+    ctx.moveTo(x0 - this.element.offsetLeft, y0 - this.element.offsetTop);
+    ctx.lineTo(x1 - this.element.offsetLeft, y1 - this.element.offsetTop);
     ctx.stroke();
     ctx.closePath();
 
@@ -81,10 +79,10 @@ Whiteboard.prototype.drawLine = function(x0, y0, x1, y1, emit) {
     var h = this.element.height;
 
     socket.emit('drawing', {
-        x0: x0, 
-        y0: y0, 
-        x1: x1,
-        y1: y1 
+        x0: x0 / w, 
+        y0: y0 / h, 
+        x1: x1 / w,
+        y1: y1 / h
     });
 }
 
