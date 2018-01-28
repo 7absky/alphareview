@@ -27,7 +27,6 @@ Whiteboard.prototype.fillParent = function() {
     var parentSize = this.parent.getBoundingClientRect();
     this.element.width = parentSize.width;
     this.element.height = parentSize.height;
-    console.log('window resized!');
 }
 
 Whiteboard.prototype.addListeners = function() {
@@ -35,13 +34,13 @@ Whiteboard.prototype.addListeners = function() {
     self.element.onmousedown = this.startDrawing.bind(self);
     self.element.onmousemove = this.draw.bind(self);
     self.element.onmouseup = this.stopDrawing.bind(self);
-    self.socket.on('drawing', this.onDrawingEvent.bind(self))
+    self.socket.on('drawing', this.throttle(this.onDrawingEvent.bind(self), 10));
 }
 
 Whiteboard.prototype.onDrawingEvent = function(data) {
     var w = this.element.width;
     var h = this.element.height;
-    this.drawLine(data.x0 * w, data.y0 * h, data.x1 * w, data.y1 * h);
+    this.drawLine(data.x0 * w, data.y0 * h, data.x1 * w, data.y1 * h, 'green');
 }
 
 Whiteboard.prototype.startDrawing = function(e) {
@@ -57,19 +56,20 @@ Whiteboard.prototype.draw = function(e) {
         var y0 = this.currentState.posY;
         var x1 = e.pageX;
         var y1 = e.pageY;
-        this.drawLine(x0, y0, x1, y1, true);
+        this.drawLine(x0, y0, x1, y1, 'red', true);
 
         this.currentState.posX = e.pageX;
         this.currentState.posY = e.pageY;
     }
 }
 
-Whiteboard.prototype.drawLine = function(x0, y0, x1, y1, emit) {
+Whiteboard.prototype.drawLine = function(x0, y0, x1, y1, color, emit) {
     var ctx = this.context;
 
     ctx.beginPath();
     ctx.moveTo(x0 - this.element.offsetLeft, y0 - this.element.offsetTop);
     ctx.lineTo(x1 - this.element.offsetLeft, y1 - this.element.offsetTop);
+    ctx.strokeStyle = color;
     ctx.stroke();
     ctx.closePath();
 
@@ -92,9 +92,9 @@ Whiteboard.prototype.stopDrawing = function(e) {
 
 Whiteboard.prototype.customize = function(options, context) {
     this.element.style.background = options.bg || 'red';
-    // this.context.lineWidth = options.lineWidth || 5;
-    // this.context.strokeStyle = options.strokeColor || 'red';
-    // this.context.lineCap = options.lineCap || 'round';       
+    this.context.lineWidth = options.lineWidth || 5;
+    this.context.strokeStyle = options.strokeColor || 'red';
+    this.context.lineCap = options.lineCap || 'round';       
 }
 
 // Limit number of the events per second
