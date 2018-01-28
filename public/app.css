@@ -5,16 +5,36 @@
 body {
     padding: 0;
     margin: 0;
-    background: #666666;
+    background: #ECE9E6;  /* fallback for old browsers */
+    background: -webkit-linear-gradient(to bottom, #FFFFFF, #ECE9E6);  /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to bottom, #FFFFFF, #ECE9E6); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
     width: 100vw;
     height: 100vh;
 }
 
+
 #root {
-    width: 80vw;
-    height: 75vh;
+    width: 65vw;
+    height: 85vh;
+    box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4);
+}
+
+#sidebar {
+    height: 100%;
+    width: 25vw;
+    min-width: 300px;
+    background: #222222;
+}
+
+#toolbox {
+    height: 85vh;
+    min-width: 60px;
+    background: #222222;
+    margin: 0 10px;
+    border-radius: 10px;
 }
 
