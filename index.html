@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Canvas</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="app.css">
+</head>
+<body>
+    <div id="root"></div>
+
+    <script src="app.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        var socket = io();
+        var whiteboard = new Whiteboard('root', socket);
+        var options = {
+            bg: 'white'
+        };
+        whiteboard.init('canv', options);
+    </script>
+</body>
+</html>
