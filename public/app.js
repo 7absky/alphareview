@@ -112,6 +112,40 @@ Whiteboard.prototype.throttle = function(callback, delay){
 }
 
 
+function ToolBox() {
+    this.tools = [
+        'RED',
+        'GREEN',
+        'BLUE',
+        'THIN',
+        'MEDIUM',
+        'BOLD',
+        'ERASE',
+        'GOOD',
+        'BAD'
+    ];
+}
+
+ToolBox.prototype.init = function() {
+
+}
+
+
+
+
+ToolBox.prototype.prepareMarkup = function() {
+    const markup = this.tools.map(function(toolName) {
+        return `<li class="tool ${toolName}"></li>`;
+    });
+    return '<ul class="tools">' + markup.join("") + '</ul>';
+}
+
+ToolBox.prototype.getMarkup = function() {
+    return this.prepareMarkup();
+}
+
+var foo = new ToolBox();
+console.log(foo.getMarkup());
 
 
 
