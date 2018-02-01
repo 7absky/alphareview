@@ -12,15 +12,10 @@
     <div id="sidebar"></div>
     <div id="root"></div>
     <div id="toolbox"></div>
+    <script src="/socket.io/socket.io.js"></script>    
     <script src="app.js"></script>
-    <script src="/socket.io/socket.io.js"></script>
     <script>
-        var socket = io();
-        var whiteboard = new Whiteboard('root', socket);
-        var options = {
-            bg: 'white'
-        };
-        whiteboard.init('canv', options);
+        whiteboard.init();
     </script>
 </body>
 </html>

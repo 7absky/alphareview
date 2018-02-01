@@ -1,115 +1,127 @@
-function Whiteboard(parentId, socket){
-    this.parent = document.querySelector('#' + parentId);
-    this.socket = socket;
-    this.currentState = {
-        isDrawing: false
+var socket = io();
+var whiteboard = (function(socket) {
+
+    var wrapperElement = document.querySelector('#root');
+    var socket = socket;
+    var element = null;
+    var context = null;
+    var styles = {
+        background: '#ffffff',
+        lineWidth: 5,
+        strokeStyle: 'red',
+        lineCap: 'round' 
     }
-    window.onresize = this.fillParent.bind(this);
-}
-
-Whiteboard.prototype.init = function(id, options){
-    this.createAndAppendCanvas(id, options);
-    this.fillParent();
-    this.addListeners();
-};
-
-Whiteboard.prototype.createAndAppendCanvas = function(id, options) {
-    var canvasElement = document.createElement('canvas');
-    this.element = canvasElement;
-    this.element.id = id;
-    this.context = this.element.getContext('2d');
-    this.customize(options, this.context);
-    this.parent.appendChild(this.element);
-
-}
-
-Whiteboard.prototype.fillParent = function() {
-    var parentSize = this.parent.getBoundingClientRect();
-    this.element.width = parentSize.width;
-    this.element.height = parentSize.height;
-}
-
-Whiteboard.prototype.addListeners = function() {
-    var self = this;
-    self.element.onmousedown = this.startDrawing.bind(self);
-    self.element.onmousemove = this.draw.bind(self);
-    self.element.onmouseup = this.stopDrawing.bind(self);
-    self.socket.on('drawing', this.throttle(this.onDrawingEvent.bind(self), 10));
-}
-
-Whiteboard.prototype.onDrawingEvent = function(data) {
-    var w = this.element.width;
-    var h = this.element.height;
-    this.drawLine(data.x0 * w, data.y0 * h, data.x1 * w, data.y1 * h, 'green');
-}
-
-Whiteboard.prototype.startDrawing = function(e) {
-    this.currentState.isDrawing = true;
-    // coordinates on canvas element
-    this.currentState.posX = e.pageX;
-    this.currentState.posY = e.pageY;
-}
-
-Whiteboard.prototype.draw = function(e) {
-    if(this.currentState.isDrawing) {
-        var x0 = this.currentState.posX;
-        var y0 = this.currentState.posY;
-        var x1 = e.pageX;
-        var y1 = e.pageY;
-        this.drawLine(x0, y0, x1, y1, 'red', true);
-
-        this.currentState.posX = e.pageX;
-        this.currentState.posY = e.pageY;
+    var currentState = {
+        isDrawing: false,
+        color: styles.strokeStyle,
+        lineWidth: styles.lineWidth,
+        lineCap: styles.lineCap
     }
-}
 
-Whiteboard.prototype.drawLine = function(x0, y0, x1, y1, color, emit) {
-    var ctx = this.context;
+    function init() {
+        createCanvas();
+        customize();
+        window.onresize = resize;
+        addListeners();
+    }
 
-    ctx.beginPath();
-    ctx.moveTo(x0 - this.element.offsetLeft, y0 - this.element.offsetTop);
-    ctx.lineTo(x1 - this.element.offsetLeft, y1 - this.element.offsetTop);
-    ctx.strokeStyle = color;
-    ctx.stroke();
-    ctx.closePath();
+    function createCanvas() {
+        element = document.createElement('canvas');
+        element.id = 'whiteboard';
+        element.style = styles.background;
+        wrapperElement.appendChild(element);
+        resize();            
+        return element;
+    }
 
-    if(!emit) {return;}
+    function customize() {
+        context = element.getContext('2d');
+        context.lineWidth = currentState.lineWidth;
+        context.strokeStyle = currentState.color;
+        context.lineCap = currentState.lineCap;
+    }
 
-    var w = this.element.width;
-    var h = this.element.height;
+    function resize() {
+        var parentSize = wrapperElement.getBoundingClientRect();
+        element.width = parentSize.width;
+        element.height = parentSize.height;
+    }
 
-    socket.emit('drawing', {
-        x0: x0 / w, 
-        y0: y0 / h, 
-        x1: x1 / w,
-        y1: y1 / h
-    });
-}
+    function addListeners() {
+        element.onmousedown = startDrawing;
+        element.onmousemove = draw;
+        element.onmouseup = stopDrawing;
+        socket.on('drawing', throttle(onDrawingEvent, 10));
+    }
 
-Whiteboard.prototype.stopDrawing = function(e) {
-    this.currentState.isDrawing = false;
-}
+    function startDrawing(e) {
+        currentState.isDrawing = true;
+        currentState.posX = e.pageX;
+        currentState.posY = e.pageY;
+    }
 
-Whiteboard.prototype.customize = function(options, context) {
-    this.element.style.background = options.bg || 'red';
-    this.context.lineWidth = options.lineWidth || 5;
-    this.context.strokeStyle = options.strokeColor || 'red';
-    this.context.lineCap = options.lineCap || 'round';       
-}
-
-// Limit number of the events per second
-Whiteboard.prototype.throttle = function(callback, delay){
-    var previousCall = new Date().getTime();
-
-    return function() {
-        var time = new Date().getTime();
-
-        if( (time-previousCall) >= delay ) {
-            previousCall = time;
-            callback.apply(null, arguments);
+    function draw(e) {
+        if (currentState.isDrawing) {
+            var x0 = currentState.posX;
+            var y0 = currentState.posY;
+            var x1 = e.pageX;
+            var y1 = e.pageY;
+            drawLine(x0, y0, x1, y1, currentState.color, true);
+            currentState.posX = e.pageX;
+            currentState.posY = e.pageY;
         }
-    };
-}
+    }
+
+    function drawLine(x0, y0, x1, y1, color, emit) {
+        context.beginPath();
+        context.moveTo(x0 - element.offsetLeft, y0 - element.offsetTop);
+        context.lineTo(x1 - element.offsetLeft, y1 - element.offsetTop);
+        context.strokeStyle = color;
+        context.stroke();
+        context.closePath();
+
+        if(!emit) {return;}
+
+        var w = element.width;
+        var h = element.height;
+
+        socket.emit('drawing', {
+            x0: x0 / w, 
+            y0: y0 / h, 
+            x1: x1 / w,
+            y1: y1 / h,
+            color: color
+        });
+    }
+
+    function stopDrawing() {
+        currentState.isDrawing = false;
+    }
+
+    function onDrawingEvent(data) {
+        var w = element.width;
+        var h = element.height;
+        drawLine(data.x0 * w, data.y0 * h, data.x1 * w, data.y1 * h, 'green');
+    }
+
+    function throttle(callback, delay){
+        var previousCall = new Date().getTime();
+        return function() {
+            var time = new Date().getTime();
+
+            if( (time-previousCall) >= delay ) {
+                previousCall = time;
+                callback.apply(null, arguments);
+            }
+        };
+    }
+    return {
+        init: init,
+    }
+})(socket);
+
+
+
 
 
 function ToolBox() {
@@ -118,7 +130,7 @@ function ToolBox() {
         'GREEN',
         'BLUE',
         'THIN',
-        'MEDIUM',
+        'MEDIUM',   
         'BOLD',
         'ERASE',
         'GOOD',
@@ -145,7 +157,6 @@ ToolBox.prototype.getMarkup = function() {
 }
 
 var foo = new ToolBox();
-console.log(foo.getMarkup());
 
 
 
