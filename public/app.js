@@ -51,6 +51,7 @@ var whiteboard = (function(socket) {
         element.onmousedown = startDrawing;
         element.onmousemove = draw;
         element.onmouseup = stopDrawing;
+        element.onmouseout = stopDrawing;
         socket.on('drawing', throttle(onDrawingEvent, 10));
     }
 
