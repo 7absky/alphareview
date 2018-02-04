@@ -10,6 +10,12 @@ body {
     height: 100vh;
 }
 
+.flex-center {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
 .container-fluid {
     height: 100vh;
 }
@@ -28,9 +34,10 @@ body {
     border: 2px solid #2222226b;
     margin: 5px;
     height: 50px;
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
+}
+
+.toolbox-colors {
+    height: 100%;
 }
 
 .tool {

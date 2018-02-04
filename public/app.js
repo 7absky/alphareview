@@ -18,9 +18,23 @@ var whiteboard = (function(socket) {
         lineCap: styles.lineCap
     }
 
+    var colors = ['black', 'red', 'blue', 'green', 'white'];
+    
+    function prepareToolboxMarkup() {
+        var markup = `<div class="toolbox-colors flex-center">`;
+        colors.forEach(function(color){
+            markup += `<div class="tool tool-color" id="${color}"></div>`
+        });
+        markup += `</div>`;
+        return markup;
+    }
+            
+
+
     function init() {
         createCanvas();
         customize();
+        createAndAddToolbox();
         window.onresize = resize;
         addListeners();
     }
@@ -119,6 +133,22 @@ var whiteboard = (function(socket) {
         };
     }
 
+
+    function createAndAddToolbox() {
+        var element = document.createElement('div');
+        element.id = 'toolbox';
+        element.innerHTML = prepareToolboxMarkup();
+        wrapperElement.appendChild(element);
+        addStylesForTools();
+        
+        return element;
+    }
+
+    function addStylesForTools() {
+        document.querySelectorAll('.tool-color').forEach(function(tool){
+            tool.style.background = tool.id;
+        })
+    }
 
 
     return {
