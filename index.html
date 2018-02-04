@@ -6,12 +6,16 @@
     <title>Canvas</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="app.css">
 </head>
 <body>
-    <div id="sidebar"></div>
-    <div id="root"></div>
-    <div id="toolbox"></div>
+    <div class="container-fluid">
+        <div class="row app">
+            <div class="col-sm-3 sidebar"></div>
+            <div class="col-sm-9" id="root"></div>
+        </div>
+    </div>
     <script src="/socket.io/socket.io.js"></script>    
     <script src="app.js"></script>
     <script>

@@ -74,8 +74,10 @@ var whiteboard = (function(socket) {
 
     function drawLine(x0, y0, x1, y1, color, emit) {
         context.beginPath();
-        context.moveTo(x0 - element.offsetLeft, y0 - element.offsetTop);
-        context.lineTo(x1 - element.offsetLeft, y1 - element.offsetTop);
+        var offsetLeftAcc = element.parentNode.offsetLeft + element.offsetLeft;
+        var offsetTopAcc = element.parentNode.offsetTop + element.offsetTop;
+        context.moveTo(x0 - offsetLeftAcc, y0 - offsetTopAcc);
+        context.lineTo(x1 - offsetLeftAcc, y1 - offsetTopAcc);
         context.strokeStyle = color;
         context.stroke();
         context.closePath();
@@ -115,48 +117,10 @@ var whiteboard = (function(socket) {
             }
         };
     }
+
+
+
     return {
         init: init,
     }
 })(socket);
-
-
-
-
-
-function ToolBox() {
-    this.tools = [
-        'RED',
-        'GREEN',
-        'BLUE',
-        'THIN',
-        'MEDIUM',   
-        'BOLD',
-        'ERASE',
-        'GOOD',
-        'BAD'
-    ];
-}
-
-ToolBox.prototype.init = function() {
-
-}
-
-
-
-
-ToolBox.prototype.prepareMarkup = function() {
-    const markup = this.tools.map(function(toolName) {
-        return `<li class="tool ${toolName}"></li>`;
-    });
-    return '<ul class="tools">' + markup.join("") + '</ul>';
-}
-
-ToolBox.prototype.getMarkup = function() {
-    return this.prepareMarkup();
-}
-
-var foo = new ToolBox();
-
-
-
