@@ -38,6 +38,7 @@ body {
 
 .toolbox-colors {
     height: 100%;
+    position: relative;
 }
 
 .tool {
@@ -49,6 +50,15 @@ body {
 }
 
 .tool:last-child { margin-right: 5px;}
+
+#white::before {
+    content: "M";
+    position: absolute;
+    top: 0;
+    left: 193px;
+    font-size: 30px;
+    color: #222222;
+}
 
 .sidebar {
     height: 100%;

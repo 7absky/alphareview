@@ -19,17 +19,6 @@ var whiteboard = (function(socket) {
     }
 
     var colors = ['black', 'red', 'blue', 'green', 'white'];
-    
-    function prepareToolboxMarkup() {
-        var markup = `<div class="toolbox-colors flex-center">`;
-        colors.forEach(function(color){
-            markup += `<div class="tool tool-color" id="${color}"></div>`
-        });
-        markup += `</div>`;
-        return markup;
-    }
-            
-
 
     function init() {
         createCanvas();
@@ -81,19 +70,20 @@ var whiteboard = (function(socket) {
             var y0 = currentState.posY;
             var x1 = e.pageX;
             var y1 = e.pageY;
-            drawLine(x0, y0, x1, y1, currentState.color, true);
+            drawLine(x0, y0, x1, y1, currentState, true);
             currentState.posX = e.pageX;
             currentState.posY = e.pageY;
         }
     }
 
-    function drawLine(x0, y0, x1, y1, color, emit) {
+    function drawLine(x0, y0, x1, y1, options, emit) {
         context.beginPath();
         var offsetLeftAcc = element.parentNode.offsetLeft + element.offsetLeft;
         var offsetTopAcc = element.parentNode.offsetTop + element.offsetTop;
         context.moveTo(x0 - offsetLeftAcc, y0 - offsetTopAcc);
         context.lineTo(x1 - offsetLeftAcc, y1 - offsetTopAcc);
-        context.strokeStyle = color;
+        context.strokeStyle = options.color;
+        context.lineWidth = options.lineWidth;
         context.stroke();
         context.closePath();
 
@@ -107,7 +97,7 @@ var whiteboard = (function(socket) {
             y0: y0 / h, 
             x1: x1 / w,
             y1: y1 / h,
-            color: color
+            options: currentState
         });
     }
 
@@ -118,7 +108,7 @@ var whiteboard = (function(socket) {
     function onDrawingEvent(data) {
         var w = element.width;
         var h = element.height;
-        drawLine(data.x0 * w, data.y0 * h, data.x1 * w, data.y1 * h, 'green');
+        drawLine(data.x0 * w, data.y0 * h, data.x1 * w, data.y1 * h, data.options);
     }
 
     function throttle(callback, delay){
@@ -140,7 +130,7 @@ var whiteboard = (function(socket) {
         element.innerHTML = prepareToolboxMarkup();
         wrapperElement.appendChild(element);
         addStylesForTools();
-        
+        attachListenersToToolbox();
         return element;
     }
 
@@ -148,6 +138,34 @@ var whiteboard = (function(socket) {
         document.querySelectorAll('.tool-color').forEach(function(tool){
             tool.style.background = tool.id;
         })
+    }
+
+    function prepareToolboxMarkup() {
+        var markup = `<div class="toolbox-colors flex-center">`;
+        colors.forEach(function(color){
+            markup += `<div class="tool tool-color" id="${color}"></div>`
+        });
+        markup += `</div>`;
+        return markup;
+    }
+
+    function attachListenersToToolbox() {
+        var colors = document.querySelectorAll('.tool-color');
+        colors.forEach(function(color){
+            color.addEventListener('click', setColor);
+        });
+    }
+
+    function setColor(e) {
+        var chosenColor = e.target.id; 
+        // white is considered as a rubber so it has to be much wider 
+        if(chosenColor === 'white') {
+            currentState.lineWidth = 30;
+        } else {
+            currentState.lineWidth = 5;
+        }
+        currentState.color = chosenColor;
+        customize();
     }
 
 
