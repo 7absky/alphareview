@@ -1,4 +1,4 @@
-define(["./socket.io"], function(Socket){
+define(["./libs/socket.io"], function(Socket){
     var socket = new Socket();
     var wrapperElement = document.querySelector('#root');
     var element = null;
