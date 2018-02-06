@@ -150,10 +150,8 @@ var whiteboard = (function(socket) {
     }
 
     function attachListenersToToolbox() {
-        var colors = document.querySelectorAll('.tool-color');
-        colors.forEach(function(color){
-            color.addEventListener('click', setColor);
-        });
+        var colorsToolbox = document.querySelector('.toolbox-colors');
+        colorsToolbox.addEventListener('click', setColor);
     }
 
     function setColor(e) {
