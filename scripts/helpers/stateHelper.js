@@ -1,7 +1,7 @@
 define([], function(){
     var state = {
         isDrawing: false,
-        color: "#D20001",
+        color: "red",
         lineWidth: 5,
         lineCap: 'round'
     };
