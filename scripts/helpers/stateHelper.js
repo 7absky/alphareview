@@ -3,7 +3,9 @@ define([], function(){
         isDrawing: false,
         color: "red",
         lineWidth: 5,
-        lineCap: 'round'
+        lineCap: 'round',
+        posX: null,
+        posY: null
     };
 
     function setState(key, value){
