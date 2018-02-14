@@ -1,6 +1,15 @@
 define(["./libs/socket.io",
         "./helpers/domHelper",
-        "./helpers/stateHelper"], function(Socket, DOMHelper, StateHelper){
+        "./helpers/stateHelper",
+        "toolbox"],
+        function(
+            Socket,
+            DOMHelper,
+            StateHelper,
+            Toolbox
+        ){
+
+
     var socket = new Socket();
     var wrapperElement = document.querySelector('#root');
     var element = null; 
@@ -18,7 +27,7 @@ define(["./libs/socket.io",
     function init() {
         createCanvas();
         customize();
-        createAndAddToolbox();
+        wrapperElement.appendChild(Toolbox);
         window.onresize = resize;
         addListeners();
     }
@@ -116,54 +125,15 @@ define(["./libs/socket.io",
         };
     }
 
-
-    function createAndAddToolbox() {
-        var element = document.createElement('div');
-        element.id = 'toolbox';
-        element.innerHTML = prepareToolboxMarkup();
-        wrapperElement.appendChild(element);
-        addStylesForTools();
-        attachListenersToToolbox();
-        return element;
-    }
-
-    function addStylesForTools() {
-        document.querySelectorAll('.tool-color').forEach(function(tool){
-            tool.style.background = tool.id;
-        })
-    }
-
-    function prepareToolboxMarkup() {
-        var colorsHTML = '',
-            notesHTML = '',
-            markup = '';
-        
-        colorsHTML = `<div class="toolbox-colors flex-center">`;
-        colors.forEach(function(color){
-            colorsHTML += `<div class="tool tool-color" id="${color}"></div>`
-        });
-        colorsHTML += `</div>`;
-        notesHTML += `<div class="toolbox-notes flex-center">`;
-        notesHTML += `<div class="tool tool-note' id="positive"></div>`;
-        notesHTML += `<div class="tool tool-note' id="negative"></div>`;
-        notesHTML += '</div>'
-        return colorsHTML + notesHTML;
-    }
-
-    function attachListenersToToolbox() {
-        var colorsToolbox = document.querySelector('.toolbox-colors');
-        colorsToolbox.addEventListener('click', setColor);
-    }
-
     function setColor(e) {
         var chosenColor = e.target.id; 
         // white is considered as a rubber so it has to be much wider 
         if(chosenColor === 'white') {
-            currentState.lineWidth = 30;
+            StateHelper.setState('lineWidth', 30);
         } else {
-            currentState.lineWidth = 5;
+            StateHelper.setState('lineWidth', 5);
         }
-        currentState.color = chosenColor;
+        StateHelper.setState('color', chosenColor);
         customize();
     }
     return {
