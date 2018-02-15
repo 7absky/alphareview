@@ -5,10 +5,6 @@ var io = require('socket.io')(http);
 var port = process.env.PORT || 3000;
 
 app.use(express.static('scripts'));
-io.configure(function(){
-    io.set('transports', ["xhr-polling"]);
-    io.set("polling duration", 10);
-})
 app.get('/', function(req, res){
     res.sendFile(__dirname + '/index.html');
 });
