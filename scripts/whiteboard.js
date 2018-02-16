@@ -14,6 +14,8 @@ define(["./libs/socket.io",
     var wrapperElement = document.querySelector('#root');
     var element = null; 
     var context = null;
+    var posX = null;
+    var posY = null;
     var styles = {
         background: '#ffffff',
         lineWidth: 5,
@@ -58,23 +60,24 @@ define(["./libs/socket.io",
         element.onmouseup = stopDrawing;
         element.onmouseout = stopDrawing;
         socket.on('drawing', throttle(onDrawingEvent, 10));
+        document.addEventListener('stateChange', customize);
     }
 
     function startDrawing(e) {
         StateHelper.setState('isDrawing', true);
-        StateHelper.setState('posX', e.pageX);
-        StateHelper.setState('posY', e.pageY);
+        posX = e.pageX;
+        posY = e.pageY;
     }
 
     function draw(e) {
         if (StateHelper.getState('isDrawing')) {
-            var x0 = StateHelper.getState('posX');
-            var y0 = StateHelper.getState('posY');
+            var x0 = posX;
+            var y0 = posY;
             var x1 = e.pageX;
             var y1 = e.pageY;
             drawLine(x0, y0, x1, y1, currentState, true);
-            StateHelper.setState('posX', e.pageX);
-            StateHelper.setState('posY', e.pageY);
+            posX = e.pageX;
+            posY = e.pageY;
         }
     }
 

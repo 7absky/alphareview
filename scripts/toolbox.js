@@ -25,14 +25,14 @@ define(["./helpers/domHelper",
             var tool = e.target.dataset.tool;
             if (tool) {
                 if (tool == 'mouse') {
-                    console.log('mouse clicked!');
+                    chooseMouse();
                     return;
                 }
                 if (tool == 'note') {
                     console.log('note clicked!');
                     return;
                 }
-                console.log(tool + ' clicked');
+                StateHelper.setState('color', tool);
             }
         });
     }

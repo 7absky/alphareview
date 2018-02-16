@@ -4,12 +4,11 @@ define([], function(){
         color: "red",
         lineWidth: 5,
         lineCap: 'round',
-        posX: null,
-        posY: null
     };
-
+    var changeEvent = new CustomEvent('stateChange');
     function setState(key, value){
         state[key] = value;
+        document.dispatchEvent(changeEvent);
     }
 
     function getState(key) {
