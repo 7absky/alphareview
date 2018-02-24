@@ -32,7 +32,7 @@ define(["./helpers/domHelper",
                     console.log('note clicked!');
                     return;
                 }
-                StateHelper.setState('color', tool);
+                choosePen(tool);
             }
         });
     }
@@ -40,6 +40,11 @@ define(["./helpers/domHelper",
     function chooseMouse() {
         StateHelper.setState('color', 'white');
         StateHelper.setState('lineWidth', 30);
+    }
+
+    function choosePen(tool) {
+        StateHelper.setState('color', tool);
+        StateHelper.setState('lineWidth', 5);
     }
 
     (function(){
