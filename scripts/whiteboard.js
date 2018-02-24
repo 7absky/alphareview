@@ -64,9 +64,12 @@ define(["./libs/socket.io",
     }
 
     function startDrawing(e) {
-        StateHelper.setState('isDrawing', true);
-        posX = e.pageX;
-        posY = e.pageY;
+        if (StateHelper.getState('currentAction') === 'draw') {
+            StateHelper.setState('isDrawing', true);
+            posX = e.pageX;
+            posY = e.pageY;
+        }
+        
     }
 
     function draw(e) {

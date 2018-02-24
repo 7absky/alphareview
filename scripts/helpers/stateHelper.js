@@ -1,5 +1,6 @@
 define([], function(){
     var state = {
+        currentAction: 'draw',
         isDrawing: false,
         color: "red",
         lineWidth: 5,

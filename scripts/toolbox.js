@@ -5,7 +5,7 @@ define(["./helpers/domHelper",
 
     var tools = ['black', 'red', 'blue', 'green', 'mouse', 'note'];
     var toolboxElt;
-
+    var whiteboard;
     
     function createToolboxStructure(){
         toolboxElt = DOMHelper.createElement('div', {
@@ -23,7 +23,8 @@ define(["./helpers/domHelper",
         });
     }
 
-    function attachListeners(){
+    function attachListeners() {
+        whiteboard = document.querySelector('#whiteboard');        
         toolboxElt.addEventListener('click', function(e){
             e.stopPropagation();
             var tool = e.target.dataset.tool;
@@ -33,7 +34,7 @@ define(["./helpers/domHelper",
                     return;
                 }
                 if (tool == 'note') {
-                    console.log('note clicked!');
+                    chooseNote();
                     return;
                 }
                 choosePen(tool);
@@ -43,12 +44,22 @@ define(["./helpers/domHelper",
 
     function chooseMouse() {
         StateHelper.setState('color', 'white');
+        StateHelper.setState('currentAction', 'draw');
         StateHelper.setState('lineWidth', 30);
+        whiteboard.style.cursor = 'default';
+        
     }
 
     function choosePen(tool) {
         StateHelper.setState('color', tool);
+        StateHelper.setState('currentAction', 'draw');
         StateHelper.setState('lineWidth', 5);
+        whiteboard.style.cursor = 'default';
+    }
+
+    function chooseNote() {
+        StateHelper.setState('currentAction', 'text');
+        whiteboard.style.cursor = 'crosshair';
     }
 
     (function(){
