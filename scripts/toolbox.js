@@ -8,13 +8,17 @@ define(["./helpers/domHelper",
 
     
     function createToolboxStructure(){
-        toolboxElt = DOMHelper.createElement('div', {id: "toolbox"});
+        toolboxElt = DOMHelper.createElement('div', {
+            id: 'toolbox',
+            'style': 'display: flex'});
         tools.forEach(function(tool){
+            var txt;
+            tool === 'note' ? txt = 'Txt' : txt = undefined;
             var elt = DOMHelper.createElement('div', {
                 'class': 'tool',
                 'data-tool': tool,
                 'style': 'background:' + (tool == 'note' ? 'yellow' : tool == 'mouse' ? 'white' : tool)
-            });
+            },txt);
             toolboxElt.appendChild(elt);
         });
     }

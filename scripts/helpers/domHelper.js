@@ -12,14 +12,15 @@ define([],function(){
         }
         // check if another argument is a string
         // if so, append it to the node as a text
-        for (var i = 2; i < arguments.length; i++) {
-            var child = arguments[i];
-            if (typeof child == 'string') {
-                child = document.createTextNode(child);
+        if(arguments[2]) {
+            for (var i = 2; i < arguments.length; i++) {
+                var child = arguments[i];
+                if (child && typeof child == 'string') {
+                    child = document.createTextNode(child);
+                }
+                node.appendChild(child);
             }
-            node.appendChild(child);
         }
-
         return node;
     }
 
