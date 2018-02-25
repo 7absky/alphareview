@@ -24,8 +24,13 @@ define([],function(){
         return node;
     }
 
+    function appendChild(parent, child) {
+        parent.appendChild(child);
+    }
+
 
     return {
-        createElement: createElement
+        createElement: createElement,
+        appendChild: appendChild
     }
 });

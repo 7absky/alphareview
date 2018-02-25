@@ -1,3 +1,4 @@
-requirejs(["whiteboard"], function(Whiteboard){
-    Whiteboard.init();
+requirejs(["whiteboard", "loginPage"], function(Whiteboard, LoginPage){
+    //Whiteboard.init('drawingCanvas');
+   LoginPage.init('.loginPage');
 });

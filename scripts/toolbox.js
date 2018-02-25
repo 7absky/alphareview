@@ -24,7 +24,6 @@ define(["./helpers/domHelper",
     }
 
     function attachListeners() {
-        whiteboard = document.querySelector('#whiteboard');        
         toolboxElt.addEventListener('click', function(e){
             e.stopPropagation();
             var tool = e.target.dataset.tool;
@@ -46,7 +45,7 @@ define(["./helpers/domHelper",
         StateHelper.setState('color', 'white');
         StateHelper.setState('currentAction', 'draw');
         StateHelper.setState('lineWidth', 30);
-        whiteboard.style.cursor = 'default';
+        document.querySelector('#whiteboard').style.cursor = 'default';
         
     }
 
@@ -54,12 +53,12 @@ define(["./helpers/domHelper",
         StateHelper.setState('color', tool);
         StateHelper.setState('currentAction', 'draw');
         StateHelper.setState('lineWidth', 5);
-        whiteboard.style.cursor = 'default';
+        document.querySelector('#whiteboard').style.cursor = 'default';
     }
 
     function chooseNote() {
         StateHelper.setState('currentAction', 'text');
-        whiteboard.style.cursor = 'crosshair';
+        document.querySelector('#whiteboard').style.cursor = 'crosshair';
     }
 
     (function(){

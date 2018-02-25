@@ -11,7 +11,7 @@ define(["./libs/socket.io",
 
 
     var socket = new Socket();
-    var wrapperElement = document.querySelector('#root');
+    var wrapperElement;
     var element = null; 
     var context = null;
     var posX = null;
@@ -26,7 +26,8 @@ define(["./libs/socket.io",
 
     var colors = ['black', 'red', 'blue', 'green', 'white'];
 
-    function init() {
+    function init(parent) {
+        wrapperElement = document.getElementById(parent);
         createCanvas();
         customize();
         wrapperElement.appendChild(Toolbox);
@@ -69,7 +70,6 @@ define(["./libs/socket.io",
             posX = e.pageX;
             posY = e.pageY;
         }
-        
     }
 
     function draw(e) {
@@ -86,8 +86,8 @@ define(["./libs/socket.io",
 
     function drawLine(x0, y0, x1, y1, options, emit) {
         context.beginPath();
-        var offsetLeftAcc = element.parentNode.offsetLeft + element.offsetLeft;
-        var offsetTopAcc = element.parentNode.offsetTop + element.offsetTop;
+        var offsetLeftAcc = element.parentNode.offsetLeft;
+        var offsetTopAcc = element.parentNode.offsetTop;
         context.moveTo(x0 - offsetLeftAcc, y0 - offsetTopAcc);
         context.lineTo(x1 - offsetLeftAcc, y1 - offsetTopAcc);
         context.strokeStyle = options.color;
