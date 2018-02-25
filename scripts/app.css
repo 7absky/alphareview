@@ -12,10 +12,14 @@ body {
 }
 
 .loginPage {
-    width: 100%;
-    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
     background: rgba(0, 0, 0, 0.7);
     color: #ffffff;
+    z-index: 10;
 }
 
 .loginPage form {
@@ -31,11 +35,15 @@ body {
     width: 60px;
     height: 60px;
     background: #EB756B;
-    border: 2px solid #EB756B;
+    border: none;
     margin-left: 25px;
     color: #fff;
     cursor: pointer;
     opacity: 1;
+}
+
+.loginPage button:enabled:hover {
+    background: #D4584F;
 }
 
 .loginPage button:disabled {
