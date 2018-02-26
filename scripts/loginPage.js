@@ -3,7 +3,7 @@ define([
     "./helpers/stateHelper",
     "whiteboard"
 ], function(DOMHelper, StateHelper, Whiteboard){
-    var loginPage = document.querySelector("#loginPage");
+    var loginPage = document.querySelector(".loginPage");
     var parentElement;
     var alphanumeric = /^[a-z0-9@]+$/i;
     var texts = {
@@ -45,6 +45,22 @@ define([
         e.preventDefault();
         var name = ui.nameInput.value;
         StateHelper.setState('user', name);
+        fadeOut(function(){
+            Whiteboard.init('drawingCanvas');
+        });
+    }
+
+    function fadeOut(cb) {
+        var pos = 0;
+        var id = setInterval(function(){
+            if(pos <= 100){
+                loginPage.style.top = pos + "%";
+                pos++;
+            } else {
+                clearInterval(id);
+                setTimeout(cb, 300);
+            }
+        }, 5);
     }
 
 
