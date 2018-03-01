@@ -17,6 +17,11 @@ io.on('connection', function(socket){
         console.log(data);
         socket.broadcast.emit('drawing', data);
     });
+
+    socket.on('note:add', function(data) {
+        console.log('new note!', data);
+        socket.broadcast.emit('note:add', data);
+    })
 });
 
 http.listen(port, function(){

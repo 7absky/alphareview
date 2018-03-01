@@ -1,4 +1,5 @@
-define(["./helpers/domHelper"], function(DOMHelper){
+define(["./libs/socket.io", "./helpers/domHelper"], function(Socket, DOMHelper){
+    var socket = new Socket();
     var element = null;
     var el = {
         input: null,
@@ -28,13 +29,15 @@ define(["./helpers/domHelper"], function(DOMHelper){
 
     function attachListeners() {
         el.submitBtn.addEventListener('click', submitNote);
+        socket.on('note:add', addNote);
     }
 
     function submitNote(e) {
         e.preventDefault();
         var value = el.input.value;
         if (value !== '') {
-            el.list.appendChild(createNote(value));
+            addNote(value);
+            socket.emit('note:add', value);
         }
         el.input.value = '';
     }
@@ -43,6 +46,12 @@ define(["./helpers/domHelper"], function(DOMHelper){
         var newNote = DOMHelper.createElement('li', null, DOMHelper.createElement('div', null, value));
         return newNote;
     }
+
+    function addNote(value) {
+        el.list.appendChild(createNote(value));    
+    }
+
+    
 
     return {
         init: init
