@@ -66,7 +66,7 @@ body {
     height: 100%;
     display: grid;
     grid-template-columns: 0.5fr 3fr 8fr 0.5fr;
-    grid-template-rows: 1fr 5fr 5fr 1fr;
+    grid-template-rows: 1fr 5fr 2.5fr 2.5fr 1fr;
     grid-gap: 15px 15px;
 }
 
@@ -75,7 +75,82 @@ body {
     grid-column-start: 3;
     grid-column-end: 4;
     grid-row-start: 2;
+    grid-row-end: 5;
+}
+
+#sidebar-notes {
+    grid-column-start: 2;
+    grid-column-end: 3;
+    grid-row-start: 2;
     grid-row-end: 4;
+}
+
+.panel {
+    background: rgba(205, 88, 96, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: -10px 10px 20px rgba(0, 0, 0, 0.6);
+    padding: 10px;
+}
+
+.notes-form {
+    min-width: 250px;
+    width: 100%;
+}
+
+.notes-input {
+    background: rgba(0, 0, 0, 0.1);
+    color: white;
+    border: none;
+    outline: none;
+    height: 35px;
+    width: 80%;
+    padding: 0px 5px;
+    margin: 0;
+    font-size: 14px;
+    font-weight: 100;
+}
+
+#submitNote {
+    width: 35px;
+    height: 35px;
+    background: rgb(6, 83, 146);
+    border: none;
+    outline: none;
+    color: white;
+    padding: 0;
+    margin: 0 3px;
+    cursor: pointer;
+}
+
+#submitNote:hover {
+    background: #05467E;
+}
+
+.notes-list {
+    margin-top: 20px;
+    list-style: none;
+    width: 100%;
+    height: 330px;
+    padding: 5px 10px;
+    overflow-y: scroll;
+}
+
+.notes-list li div {
+    background: rgba(6, 83, 146, 0.8);
+    border: 1px solid #05467E;
+    color: white;
+    font-size: 16px;
+    font-weight: lighter;
+    padding: 5px 10px;
+    height: 35px;
+    margin-bottom: 5px;
+}
+
+
+.flex-column {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .center {
