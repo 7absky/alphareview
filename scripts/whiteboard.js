@@ -36,7 +36,7 @@ define(["./libs/socket.io",
     }
 
     function createCanvas() {
-        element = DOMHelper.createElement('canvas', {id: 'whiteboard', style: 'background: #ffffff'});
+        element = DOMHelper.createElement('canvas', {id: 'whiteboard', style: 'positon: relative; background: #ffffff'});
         wrapperElement.appendChild(element);
         resize();            
         return element;
@@ -60,8 +60,17 @@ define(["./libs/socket.io",
         element.onmousemove = draw;
         element.onmouseup = stopDrawing;
         element.onmouseout = stopDrawing;
+        element.ondblclick = addText;
         socket.on('drawing', throttle(onDrawingEvent, 10));
         document.addEventListener('stateChange', customize);
+    }
+
+    function addText(e) {
+        var textArea = DOMHelper.createElement('textarea', {'style': 'position: absolute; z-index: 9000;'});
+        textArea.style.top = e.pageY - element.parentNode.offsetTop + "px";
+        textArea.style.left = e.pageX - element.parentNode.offsetLeft + "px";
+        console.log(textArea);
+        element.appendChild(textArea);
     }
 
     function startDrawing(e) {
