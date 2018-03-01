@@ -17,8 +17,7 @@ define([
     }
 
     function init(parent) {
-        parentElement = document.querySelector(parent);
-        DOMHelper.appendChild(parentElement, createLoginPageStructure());
+        DOMHelper.appendChild(parent, createLoginPageStructure());
         attachListeners();
     }
 

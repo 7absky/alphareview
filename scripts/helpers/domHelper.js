@@ -24,8 +24,8 @@ define([],function(){
         return node;
     }
 
-    function appendChild(parent, child) {
-        parent.appendChild(child);
+    function appendChild(parentSelector, childElement) {
+        document.querySelector(parentSelector).appendChild(childElement);
     }
 
 
